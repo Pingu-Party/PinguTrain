@@ -3,6 +3,7 @@ package de.pinguparty.pingu_train;
 import de.pinguparty.pingu_train.exception.MessageSendFailException;
 import de.pinguparty.pingu_train.service.MessageDispatcher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -11,6 +12,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Component
 public class PinguTrainBot extends TelegramLongPollingBot {
+
+    @Value("telegram.bot.token")
+    private String botToken;
 
     @Autowired
     private MessageDispatcher messageDispatcher;
@@ -22,7 +26,7 @@ public class PinguTrainBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "5380143925:AAGp11WkxUT0-2tNWGqTc-8lrh34gME3Bnc";
+        return botToken;
     }
 
     @Override
