@@ -1,15 +1,19 @@
+package de.pinguparty.pingu_train;
+
+import de.pinguparty.pingu_train.exception.MessageSendFailException;
+import de.pinguparty.pingu_train.service.MessageDispatcher;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.*;
-import org.telegram.telegrambots.meta.api.methods.stickers.GetStickerSet;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageLiveLocation;
-import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.IOException;
-
+@Component
 public class PinguTrainBot extends TelegramLongPollingBot {
+
+    @Autowired
+    private MessageDispatcher messageDispatcher;
 
     @Override
     public String getBotUsername() {
@@ -23,6 +27,16 @@ public class PinguTrainBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        if(update == null) {
+            return;
+        }
+
+        if(update.hasMessage() && update.getMessage().hasText()) {
+            messageDispatcher.dispatch(this, update.getMessage());
+        }
+
+
+        /*
         if (update.hasMessage() && update.getMessage().hasText()) {
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
             message.setChatId(update.getMessage().getChatId().toString());
@@ -64,11 +78,23 @@ public class PinguTrainBot extends TelegramLongPollingBot {
                 double latitude = Math.random() * 60;
                 editMessageLiveLocation.setLatitude(latitude);
                 editMessageLiveLocation.setLongitude(longitude);
-                execute(editMessageLiveLocation);*/
+                execute(editMessageLiveLocation);
                 execute(sendMessage);
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                eprintStackTrace();
             }
+        }*/
+    }
+
+    public Integer sendTextMessage(String chatID, String message) throws MessageSendFailException {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatID);
+        sendMessage.setText(message);
+        sendMessage.enableHtml(true);
+        try {
+            return execute(sendMessage).getMessageId();
+        } catch (Exception e) {
+            throw new MessageSendFailException();
         }
     }
 }

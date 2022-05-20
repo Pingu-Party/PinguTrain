@@ -1,3 +1,5 @@
+package de.pinguparty.pingu_train;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
