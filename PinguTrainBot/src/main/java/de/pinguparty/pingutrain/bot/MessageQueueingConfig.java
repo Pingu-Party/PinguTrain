@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * Configuration for message queueing.
  */
 @Configuration
-public class MessageQueueingConfiguration {
+public class MessageQueueingConfig {
 
     @Value("${pingutrain.bot.queue.updates}")
     private String updatesQueueName;

@@ -28,8 +28,34 @@ services:
             - mongodb
             - rabbitmq
         ports:
-            - "8080:8080"
             - "5005:5005"
+            - "8080:8080"
+
+    ####################################################################################################################
+    # PinguTrain Worker                                                                                        #
+    ####################################################################################################################
+    pingutrain-worker:
+        container_name: pingutrain-worker
+        build: ./PinguTrainWorker
+        environment:
+            PINGU_TRAIN_WORKER_MONGODB_HOST: mongodb
+            PINGU_TRAIN_WORKER_MONGODB_PORT: 27017
+            PINGU_TRAIN_WORKER_MONGODB_USERNAME: root
+            PINGU_TRAIN_WORKER_MONGODB_PASSWORD: 12345
+            PINGU_TRAIN_WORKER_QUEUE_UPDATES: updates
+            PINGU_TRAIN_WORKER_QUEUE_ACTIONS: actions
+            PINGU_TRAIN_WORKER_RABBITMQ_HOST: rabbitmq
+            PINGU_TRAIN_WORKER_RABBITMQ_PORT: 5672
+            PINGU_TRAIN_WORKER_RABBITMQ_USERNAME: user
+            PINGU_TRAIN_WORKER_RABBITMQ_PASSWORD: 12345
+        depends_on:
+            - mongodb
+            - rabbitmq
+        links:
+            - mongodb
+            - rabbitmq
+        ports:
+            - "5006:5005"
 
     ####################################################################################################################
     # RabbitMQ                                                                                                        #

@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @EnableRabbit
 @SpringBootApplication
-public class PinguTrainApplication {
+public class PinguTrainBotApp {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PinguTrainApplication.class, args);
+		SpringApplication.run(PinguTrainBotApp.class, args);
 	}
 
 }
