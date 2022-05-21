@@ -2,6 +2,8 @@ package de.pinguparty.pingu_train;
 
 import de.pinguparty.pingu_train.exception.MessageSendFailException;
 import de.pinguparty.pingu_train.service.MessageDispatcher;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,7 +21,10 @@ public class PinguTrainBot extends TelegramLongPollingBot {
     private String botToken;
 
     @Autowired
-    private MessageDispatcher messageDispatcher;
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private Queue queue;
 
     @Override
     public String getBotUsername() {
@@ -37,10 +42,11 @@ public class PinguTrainBot extends TelegramLongPollingBot {
             return;
         }
 
-        if(update.hasMessage() && update.getMessage().hasText()) {
-            messageDispatcher.dispatch(this, update.getMessage());
-        }
+        rabbitTemplate.convertAndSend(queue.getName(), "Test");
 
+        /*if(update.hasMessage() && update.getMessage().hasText()) {
+            messageDispatcher.dispatch(this, update.getMessage());
+        }*/
 
         /*
         if (update.hasMessage() && update.getMessage().hasText()) {

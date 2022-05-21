@@ -16,12 +16,28 @@ services:
             PINGU_TRAIN_MONGODB_USERNAME: root
             PINGU_TRAIN_MONGODB_PASSWORD: 12345
         depends_on:
+            - rabbitmq
             - mongodb
         links:
+            - rabbitmq
             - mongodb
         ports:
             - "8080:8080"
             - "5005:5005"
+
+    ####################################################################################################################
+    # RabbitMQ                                                                                                        #
+    ####################################################################################################################
+    rabbitmq:
+        container_name: rabbitmq
+        environment:
+            RABBITMQ_DEFAULT_USER: user
+            RABBITMQ_DEFAULT_PASS: 12345
+        hostname: rabbitmq
+        image: rabbitmq:3-management-alpine
+        ports:
+            - 5672:5672
+            - 15672:15672
 
     ####################################################################################################################
     # MongoDB                                                                                                          #
