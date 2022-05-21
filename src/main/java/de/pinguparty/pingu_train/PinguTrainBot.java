@@ -1,7 +1,9 @@
 package de.pinguparty.pingu_train;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.pinguparty.pingu_train.domain.ReceivedMessage;
 import de.pinguparty.pingu_train.exception.MessageSendFailException;
-import de.pinguparty.pingu_train.service.MessageDispatcher;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.time.Instant;
 
 @Component
 public class PinguTrainBot extends TelegramLongPollingBot {
@@ -26,6 +31,12 @@ public class PinguTrainBot extends TelegramLongPollingBot {
     @Autowired
     private Queue queue;
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    public PinguTrainBot() {
+        objectMapper.findAndRegisterModules();
+    }
+
     @Override
     public String getBotUsername() {
         return botUsername;
@@ -38,16 +49,37 @@ public class PinguTrainBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if(update == null) {
+        if (update == null) {
+            return;
+        }
+        if (!update.hasMessage()) {
             return;
         }
 
-        rabbitTemplate.convertAndSend(queue.getName(), "Test");
+        Message message = update.getMessage();
+        if (message.hasText()) {
+            ReceivedMessage textMessage =  new ReceivedMessage()
+                    .setText(message.getText())
+                    .setChatID(message.getChatId().toString())
+                    .setUserName(message.getFrom().getLastName())
+                    .setUserID(message.getFrom().getId().toString())
+                    .setTimestamp(Instant.ofEpochMilli(message.getDate()));
+
+            try {
+                String jsonString = objectMapper.writeValueAsString(textMessage);
+                rabbitTemplate.convertAndSend(queue.getName(), jsonString);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
+
 
         /*if(update.hasMessage() && update.getMessage().hasText()) {
             messageDispatcher.dispatch(this, update.getMessage());
         }*/
-
         /*
         if (update.hasMessage() && update.getMessage().hasText()) {
             SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
