@@ -18,17 +18,20 @@ import java.time.Instant;
 @Component
 public class PinguTrainBot extends TelegramLongPollingBot {
 
-    @Value("${pingu_train.bot.telegram.token}")
+    @Value("${pingutrain.bot.telegram.token}")
     private String botToken;
 
-    @Value("${pingu_train.bot.telegram.username}")
+    @Value("${pingutrain.bot.telegram.username}")
     private String botUsername;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    private Queue queue;
+    private Queue updatesQueue;
+
+    @Autowired
+    private Queue actionsQueue;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -57,7 +60,7 @@ public class PinguTrainBot extends TelegramLongPollingBot {
 
         Message message = update.getMessage();
         if (message.hasText()) {
-            ReceivedMessage textMessage =  new ReceivedMessage()
+            ReceivedMessage textMessage = new ReceivedMessage()
                     .setText(message.getText())
                     .setChatID(message.getChatId().toString())
                     .setUserName(message.getFrom().getLastName())
@@ -66,7 +69,7 @@ public class PinguTrainBot extends TelegramLongPollingBot {
 
             try {
                 String jsonString = objectMapper.writeValueAsString(textMessage);
-                rabbitTemplate.convertAndSend(queue.getName(), jsonString);
+                rabbitTemplate.convertAndSend(updatesQueue.getName(), jsonString);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

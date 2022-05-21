@@ -15,12 +15,18 @@ services:
             PINGU_TRAIN_BOT_MONGODB_PORT: 27017
             PINGU_TRAIN_BOT_MONGODB_USERNAME: root
             PINGU_TRAIN_BOT_MONGODB_PASSWORD: 12345
+            PINGU_TRAIN_BOT_QUEUE_UPDATES: updates
+            PINGU_TRAIN_BOT_QUEUE_ACTIONS: actions
+            PINGU_TRAIN_BOT_RABBITMQ_HOST: rabbitmq
+            PINGU_TRAIN_BOT_RABBITMQ_PORT: 5672
+            PINGU_TRAIN_BOT_RABBITMQ_USERNAME: user
+            PINGU_TRAIN_BOT_RABBITMQ_PASSWORD: 12345
         depends_on:
-            - rabbitmq
             - mongodb
+            - rabbitmq
         links:
-            - rabbitmq
             - mongodb
+            - rabbitmq
         ports:
             - "8080:8080"
             - "5005:5005"
