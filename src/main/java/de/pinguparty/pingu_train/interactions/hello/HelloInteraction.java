@@ -1,7 +1,7 @@
-package de.pinguparty.pingu_train.domain.interactions.hello;
+package de.pinguparty.pingu_train.interactions.hello;
 
 import de.pinguparty.pingu_train.PinguTrainBot;
-import de.pinguparty.pingu_train.domain.interactions.Interaction;
+import de.pinguparty.pingu_train.interactions.Interaction;
 
 public class HelloInteraction implements Interaction {
     @Override

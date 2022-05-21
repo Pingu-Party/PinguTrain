@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+
+    ####################################################################################################################
+    # PinguTrain application                                                                                           #
+    ####################################################################################################################
+    pingu-train:
+        container_name: pingu-train
+        build: .
+        environment:
+            PINGU_TRAIN_BOT_NAME: PinguTrain
+            PINGU_TRAIN_BOT_TOKEN: 5380143925:AAGp11WkxUT0-2tNWGqTc-8lrh34gME3Bnc
+            PINGU_TRAIN_MONGODB_HOST: mongodb
+            PINGU_TRAIN_MONGODB_PORT: 27017
+            PINGU_TRAIN_MONGODB_USERNAME: root
+            PINGU_TRAIN_MONGODB_PASSWORD: 12345
+        depends_on:
+            - mongodb
+        links:
+            - mongodb
+        ports:
+            - "8080:8080"
+            - "5005:5005"
+
+    ####################################################################################################################
+    # MongoDB                                                                                                          #
+    ####################################################################################################################
+    mongodb:
+        container_name: mongodb
+        hostname: mongodb
+        image: amd64/mongo:5
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: 12345
+        ports:
+            - "27017:27017"
+        volumes:
+            - mongodb-volume:/data/db
+
+
+volumes:
+    mongodb-volume:

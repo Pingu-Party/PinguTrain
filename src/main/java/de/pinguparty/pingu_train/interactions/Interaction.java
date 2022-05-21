@@ -1,4 +1,4 @@
-package de.pinguparty.pingu_train.domain.interactions;
+package de.pinguparty.pingu_train.interactions;
 
 import de.pinguparty.pingu_train.PinguTrainBot;
 

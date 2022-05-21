@@ -1,7 +1,7 @@
 package de.pinguparty.pingu_train.service;
 
 import de.pinguparty.pingu_train.PinguTrainBot;
-import de.pinguparty.pingu_train.domain.interactions.Interaction;
+import de.pinguparty.pingu_train.interactions.Interaction;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,10 +15,10 @@ import java.util.Set;
 @Service
 public class MessageDispatcher {
 
-    private static final String INTERACTIONS_PACKAGE = "de.pinguparty.pingu_train.domain.interactions";
+    private static final String INTERACTIONS_PACKAGE = "de.pinguparty.pingu_train.interactions";
     private static final Map<String, Class<? extends Interaction>> INTERACTION_TYPES = new HashMap<>();
 
-    @Value("telegram.command.prefix")
+    @Value("${pingu_train.bot.command.prefix}")
     private String commandPrefix;
 
     static {
