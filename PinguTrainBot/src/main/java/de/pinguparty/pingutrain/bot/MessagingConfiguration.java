@@ -1,4 +1,4 @@
-package de.pinguparty.pingu_train;
+package de.pinguparty.pingutrain.bot;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;

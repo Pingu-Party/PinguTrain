@@ -3,18 +3,18 @@ version: '3'
 services:
 
     ####################################################################################################################
-    # PinguTrain application                                                                                           #
+    # PinguTrain Bot                                                                                        #
     ####################################################################################################################
-    pingu-train:
-        container_name: pingu-train
-        build: .
+    pingutrain-bot:
+        container_name: pingutrain-bot
+        build: ./PinguTrainBot
         environment:
-            PINGU_TRAIN_BOT_NAME: PinguTrain
-            PINGU_TRAIN_BOT_TOKEN: 5380143925:AAGp11WkxUT0-2tNWGqTc-8lrh34gME3Bnc
-            PINGU_TRAIN_MONGODB_HOST: mongodb
-            PINGU_TRAIN_MONGODB_PORT: 27017
-            PINGU_TRAIN_MONGODB_USERNAME: root
-            PINGU_TRAIN_MONGODB_PASSWORD: 12345
+            PINGU_TRAIN_BOT_TELEGRAM_TOKEN: 5380143925:AAGp11WkxUT0-2tNWGqTc-8lrh34gME3Bnc
+            PINGU_TRAIN_BOT_TELEGRAM_NAME: PinguTrainBot
+            PINGU_TRAIN_BOT_MONGODB_HOST: mongodb
+            PINGU_TRAIN_BOT_MONGODB_PORT: 27017
+            PINGU_TRAIN_BOT_MONGODB_USERNAME: root
+            PINGU_TRAIN_BOT_MONGODB_PASSWORD: 12345
         depends_on:
             - rabbitmq
             - mongodb

@@ -1,2 +1,4 @@
 rootProject.name = 'PinguTrain'
+include 'PinguTrainBot'
+include 'PinguTrainWorker'
 

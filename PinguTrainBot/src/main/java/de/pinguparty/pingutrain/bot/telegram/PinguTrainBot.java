@@ -1,9 +1,8 @@
-package de.pinguparty.pingu_train;
+package de.pinguparty.pingutrain.bot.telegram;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.pinguparty.pingu_train.domain.ReceivedMessage;
-import de.pinguparty.pingu_train.exception.MessageSendFailException;
+import de.pinguparty.pingutrain.bot.domain.ReceivedMessage;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +18,11 @@ import java.time.Instant;
 @Component
 public class PinguTrainBot extends TelegramLongPollingBot {
 
-    @Value("${pingu_train.bot.username}")
-    private String botUsername;
-
-    @Value("${pingu_train.bot.token}")
+    @Value("${pingu_train.bot.telegram.token}")
     private String botToken;
+
+    @Value("${pingu_train.bot.telegram.username}")
+    private String botUsername;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -128,17 +127,5 @@ public class PinguTrainBot extends TelegramLongPollingBot {
                 eprintStackTrace();
             }
         }*/
-    }
-
-    public Integer sendTextMessage(String chatID, String message) throws MessageSendFailException {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatID);
-        sendMessage.setText(message);
-        sendMessage.enableHtml(true);
-        try {
-            return execute(sendMessage).getMessageId();
-        } catch (Exception e) {
-            throw new MessageSendFailException();
-        }
     }
 }

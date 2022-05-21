@@ -1,4 +1,4 @@
-package de.pinguparty.pingu_train.domain;
+package de.pinguparty.pingutrain.bot.domain;
 
 import java.time.Instant;
 

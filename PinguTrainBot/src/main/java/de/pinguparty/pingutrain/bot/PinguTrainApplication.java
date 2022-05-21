@@ -1,4 +1,4 @@
-package de.pinguparty.pingu_train;
+package de.pinguparty.pingutrain.bot;
 
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
