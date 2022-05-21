@@ -5,10 +5,12 @@ import java.time.Instant;
 public class ReceivedMessage {
     private String chatID;
     private String userName;
+    private String firstName;
+    private String lastName;
     private String userID;
     private Instant timestamp;
     private String text;
-    //private Location location;
+    private Location location;
 
     public ReceivedMessage(){
 
@@ -29,6 +31,24 @@ public class ReceivedMessage {
 
     public ReceivedMessage setUserName(String userName) {
         this.userName = userName;
+        return this;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public ReceivedMessage setFirstName(String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public ReceivedMessage setLastName(String lastName) {
+        this.lastName = lastName;
         return this;
     }
 
@@ -57,5 +77,18 @@ public class ReceivedMessage {
     public ReceivedMessage setText(String text) {
         this.text = text;
         return this;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public ReceivedMessage setLocation(Location location) {
+        this.location = location;
+        return this;
+    }
+
+    public boolean hasLocation() {
+        return location != null;
     }
 }

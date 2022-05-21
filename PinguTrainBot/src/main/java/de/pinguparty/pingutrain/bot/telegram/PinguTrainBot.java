@@ -2,6 +2,7 @@ package de.pinguparty.pingutrain.bot.telegram;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.pinguparty.pingutrain.bot.domain.Location;
 import de.pinguparty.pingutrain.bot.domain.ReceivedMessage;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -58,25 +59,27 @@ public class PinguTrainBot extends TelegramLongPollingBot {
         }
 
         Message message = update.getMessage();
-        if (message.hasText()) {
-            ReceivedMessage textMessage = new ReceivedMessage()
-                    .setText(message.getText())
-                    .setChatID(message.getChatId().toString())
-                    .setUserName(message.getFrom().getLastName())
-                    .setUserID(message.getFrom().getId().toString())
-                    .setTimestamp(Instant.ofEpochMilli(message.getDate()));
+        ReceivedMessage textMessage = new ReceivedMessage()
+                .setChatID(message.getChatId().toString())
+                .setUserID(message.getFrom().getId().toString())
+                .setTimestamp(Instant.ofEpochSecond(message.getDate()))
+                .setUserName(message.getFrom().getLastName())
+                .setFirstName(message.getFrom().getFirstName())
+                .setLastName(message.getFrom().getLastName());
 
-            try {
-                String jsonString = objectMapper.writeValueAsString(textMessage);
-                rabbitTemplate.convertAndSend(updatesQueue.getName(), jsonString);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+        if (message.hasText()) {
+            textMessage.setText(message.getText());
+        }
+        if(message.hasLocation()) {
+            textMessage.setLocation(new Location().setLatitude(message.getLocation().getLatitude()).setLongitude(message.getLocation().getLongitude()));
         }
 
-
-
-
+        try {
+            String jsonString = objectMapper.writeValueAsString(textMessage);
+            rabbitTemplate.convertAndSend(updatesQueue.getName(), jsonString);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
         /*if(update.hasMessage() && update.getMessage().hasText()) {
             messageDispatcher.dispatch(this, update.getMessage());
