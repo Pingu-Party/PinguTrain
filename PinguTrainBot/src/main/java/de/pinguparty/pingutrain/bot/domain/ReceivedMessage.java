@@ -8,7 +8,7 @@ public class ReceivedMessage {
     private String userID;
     private Instant timestamp;
     private String text;
-    //private Location location;
+    private Location location;
 
     public ReceivedMessage(){
 
@@ -57,5 +57,18 @@ public class ReceivedMessage {
     public ReceivedMessage setText(String text) {
         this.text = text;
         return this;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public ReceivedMessage setLocation(Location location) {
+        this.location = location;
+        return this;
+    }
+
+    public boolean hasLocation() {
+        return location != null;
     }
 }

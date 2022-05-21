@@ -72,10 +72,6 @@ public class PinguTrainBot extends TelegramLongPollingBot {
             }
         }
 
-
-
-
-
         /*if(update.hasMessage() && update.getMessage().hasText()) {
             messageDispatcher.dispatch(this, update.getMessage());
         }*/
