@@ -1,26 +1,26 @@
-package de.pinguparty.pingutrain.bot.domain;
+package de.pinguparty.pingutrain.bot.messages;
 
 import java.time.Instant;
 
-public class ReceivedMessage {
-    private String chatID;
+public class UserMessage {
+    private long chatID;
     private String userName;
     private String firstName;
     private String lastName;
-    private String userID;
+    private long userID;
     private Instant timestamp;
     private String text;
     private Location location;
 
-    public ReceivedMessage(){
+    public UserMessage() {
 
     }
 
-    public String getChatID() {
+    public long getChatID() {
         return chatID;
     }
 
-    public ReceivedMessage setChatID(String chatID) {
+    public UserMessage setChatID(long chatID) {
         this.chatID = chatID;
         return this;
     }
@@ -29,7 +29,7 @@ public class ReceivedMessage {
         return userName;
     }
 
-    public ReceivedMessage setUserName(String userName) {
+    public UserMessage setUserName(String userName) {
         this.userName = userName;
         return this;
     }
@@ -38,7 +38,7 @@ public class ReceivedMessage {
         return firstName;
     }
 
-    public ReceivedMessage setFirstName(String firstName) {
+    public UserMessage setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
@@ -47,16 +47,16 @@ public class ReceivedMessage {
         return lastName;
     }
 
-    public ReceivedMessage setLastName(String lastName) {
+    public UserMessage setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
 
-    public String getUserID() {
+    public long getUserID() {
         return userID;
     }
 
-    public ReceivedMessage setUserID(String userID) {
+    public UserMessage setUserID(long userID) {
         this.userID = userID;
         return this;
     }
@@ -65,7 +65,7 @@ public class ReceivedMessage {
         return timestamp;
     }
 
-    public ReceivedMessage setTimestamp(Instant timestamp) {
+    public UserMessage setTimestamp(Instant timestamp) {
         this.timestamp = timestamp;
         return this;
     }
@@ -74,16 +74,20 @@ public class ReceivedMessage {
         return text;
     }
 
-    public ReceivedMessage setText(String text) {
+    public UserMessage setText(String text) {
         this.text = text;
         return this;
+    }
+
+    public boolean hasText() {
+        return (this.text != null) && (!this.text.isEmpty());
     }
 
     public Location getLocation() {
         return location;
     }
 
-    public ReceivedMessage setLocation(Location location) {
+    public UserMessage setLocation(Location location) {
         this.location = location;
         return this;
     }

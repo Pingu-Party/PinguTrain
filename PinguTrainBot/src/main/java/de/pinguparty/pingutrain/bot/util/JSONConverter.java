@@ -1,4 +1,4 @@
-package de.pinguparty.pingutrain.worker.util;
+package de.pinguparty.pingutrain.bot.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

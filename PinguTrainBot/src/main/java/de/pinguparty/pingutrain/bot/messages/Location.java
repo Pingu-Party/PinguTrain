@@ -1,4 +1,4 @@
-package de.pinguparty.pingutrain.bot.domain;
+package de.pinguparty.pingutrain.bot.messages;
 
 public class Location {
     private double latitude;

@@ -1,22 +1,19 @@
 package de.pinguparty.pingutrain.bot.telegram;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import de.pinguparty.pingutrain.bot.domain.Location;
-import de.pinguparty.pingutrain.bot.domain.ReceivedMessage;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import de.pinguparty.pingutrain.bot.messages.UserMessagesHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.time.Instant;
-
+/**
+ * A {@link TelegramLongPollingBot} that allows to perform actions with the bot and handle incoming user messages.
+ */
 @Component
-public class PinguTrainBot extends TelegramLongPollingBot {
+public class TelegramBot extends TelegramLongPollingBot {
 
     @Value("${pingutrain.bot.telegram.token}")
     private String botToken;
@@ -25,19 +22,7 @@ public class PinguTrainBot extends TelegramLongPollingBot {
     private String botUsername;
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Autowired
-    private Queue updatesQueue;
-
-    @Autowired
-    private Queue actionsQueue;
-
-    private ObjectMapper objectMapper = new ObjectMapper();
-
-    public PinguTrainBot() {
-        objectMapper.findAndRegisterModules();
-    }
+    private UserMessagesHandler userMessagesHandler;
 
     @Override
     public String getBotUsername() {
@@ -51,35 +36,13 @@ public class PinguTrainBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update == null) {
+        //Sanity checks
+        if ((update == null) || (!update.hasMessage())) {
             return;
         }
-        if (!update.hasMessage()) {
-            return;
-        }
 
-        Message message = update.getMessage();
-        ReceivedMessage textMessage = new ReceivedMessage()
-                .setChatID(message.getChatId().toString())
-                .setUserID(message.getFrom().getId().toString())
-                .setTimestamp(Instant.ofEpochSecond(message.getDate()))
-                .setUserName(message.getFrom().getLastName())
-                .setFirstName(message.getFrom().getFirstName())
-                .setLastName(message.getFrom().getLastName());
-
-        if (message.hasText()) {
-            textMessage.setText(message.getText());
-        }
-        if(message.hasLocation()) {
-            textMessage.setLocation(new Location().setLatitude(message.getLocation().getLatitude()).setLongitude(message.getLocation().getLongitude()));
-        }
-
-        try {
-            String jsonString = objectMapper.writeValueAsString(textMessage);
-            rabbitTemplate.convertAndSend(updatesQueue.getName(), jsonString);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        //Handle the message
+        userMessagesHandler.handleMessage(update.getMessage());
 
         /*if(update.hasMessage() && update.getMessage().hasText()) {
             messageDispatcher.dispatch(this, update.getMessage());
@@ -132,5 +95,23 @@ public class PinguTrainBot extends TelegramLongPollingBot {
                 eprintStackTrace();
             }
         }*/
+    }
+
+    /**
+     * Executes a given {@link BotApiMethod} and handles possible exceptions.
+     *
+     * @param method The {@link BotApiMethod} to execute safely
+     */
+    public void executeActionSafely(BotApiMethod<?> method) {
+        //Sanity check
+        if (method == null) return;
+
+        //Execute the given method an catch exceptions
+        try {
+            execute(method);
+        } catch (TelegramApiException e) {
+            //TODO fancy handling
+            System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
+        }
     }
 }
