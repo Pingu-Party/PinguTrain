@@ -5,7 +5,7 @@ import de.pinguparty.pingutrain.bot.util.JSONConverter;
 import de.pinguparty.pingutrain.worker.commands.BotCommander;
 import de.pinguparty.pingutrain.worker.exception.CommandNotFoundException;
 import de.pinguparty.pingutrain.worker.exception.InternalException;
-import de.pinguparty.pingutrain.worker.exception.UserNotFoundException;
+import de.pinguparty.pingutrain.worker.interactions.hello.HelloInteraction;
 import de.pinguparty.pingutrain.worker.user.UserInteractionManager;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.*;
  * corresponding {@link Interaction}s that are responsible for handling them.
  */
 @Service
-public class InteractionsDispatcher {
+public class UserMessageDispatcher {
     private static final Set<Class<? extends Interaction>> INTERACTION_CLASSES = Set.of(HelloInteraction.class);
     private static final Map<String, Class<? extends Interaction>> INTERACTION_MAP = new HashMap<>();
 

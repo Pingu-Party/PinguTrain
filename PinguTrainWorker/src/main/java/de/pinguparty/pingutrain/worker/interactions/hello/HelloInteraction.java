@@ -1,9 +1,10 @@
-package de.pinguparty.pingutrain.worker.interactions;
+package de.pinguparty.pingutrain.worker.interactions.hello;
 
-import de.pinguparty.pingutrain.bot.actions.send_text.SendTextAction;
+import de.pinguparty.pingutrain.bot.actions.text.TextMessageAction;
 import de.pinguparty.pingutrain.bot.messages.UserMessage;
 import de.pinguparty.pingutrain.worker.commands.BotCommander;
 import de.pinguparty.pingutrain.worker.exception.UserNotFoundException;
+import de.pinguparty.pingutrain.worker.interactions.Interaction;
 import de.pinguparty.pingutrain.worker.user.UserInteractionManager;
 
 public class HelloInteraction implements Interaction {
@@ -41,16 +42,6 @@ public class HelloInteraction implements Interaction {
     }
 
     /**
-     * Returns whether the interaction is stateful, i.e. needs to persist a state during the interaction.
-     *
-     * @return True, if the interaction is stateful; false otherwise
-     */
-    @Override
-    public boolean isStateful() {
-        return false;
-    }
-
-    /**
      * Handles incoming user messages by involving a {@link BotCommander} and/or a {@link UserInteractionManager}.
      *
      * @param botCommander           The {@link BotCommander} to use
@@ -68,21 +59,21 @@ public class HelloInteraction implements Interaction {
                 return;
             }
 
-            //Create action for sending text
-            SendTextAction sendTextAction = (SendTextAction) new SendTextAction()
+            //Create action for sending a text message
+            TextMessageAction textMessageAction = (TextMessageAction) new TextMessageAction()
                     .setText("Howdy, " + userMessage.getFirstName() + ", where are you living?")
                     .setChatID(userMessage.getChatID());
-            botCommander.issueBotAction(sendTextAction);
+            botCommander.issueBotAction(textMessageAction);
             return;
         }
 
         //Reset interaction
         userInteractionManager.resetCurrentUserInteraction(userMessage.getUserID());
 
-        //Create action for sending text
-        SendTextAction sendTextAction = (SendTextAction) new SendTextAction()
+        //Create action for a sending text message
+        TextMessageAction textMessageAction = (TextMessageAction) new TextMessageAction()
                 .setText("It's cool in " + userMessage.getText() + "!")
                 .setChatID(userMessage.getChatID());
-        botCommander.issueBotAction(sendTextAction);
+        botCommander.issueBotAction(textMessageAction);
     }
 }

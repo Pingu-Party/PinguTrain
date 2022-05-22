@@ -1,13 +1,13 @@
-package de.pinguparty.pingutrain.bot.actions.send_text;
+package de.pinguparty.pingutrain.bot.actions.error;
 
 import de.pinguparty.pingutrain.bot.actions.BotAction;
 import de.pinguparty.pingutrain.bot.telegram.TelegramBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 /**
- * A {@link BotAction} that allows to send text to a certain chat, given by its chat ID.
+ * A {@link BotAction} that allows to send an error message to a certain chat, given by its chat ID.
  */
-public class SendTextAction extends BotAction {
+public class ErrorMessageAction extends BotAction {
 
     private String text = "";
     private boolean notify = true;
@@ -20,7 +20,7 @@ public class SendTextAction extends BotAction {
      */
     @Override
     public String getTypeName() {
-        return "SendText";
+        return "ErrorMessage";
     }
 
     /**
@@ -36,7 +36,7 @@ public class SendTextAction extends BotAction {
         //Create and configure corresponding action object
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(Long.toString(this.chatID));
-        sendMessage.setText(this.text);
+        sendMessage.setText("\u0027\u004C " + this.text); //Prepend error emoji
         sendMessage.setDisableNotification(!notify);
         sendMessage.enableHtml(this.isHTML);
 
@@ -57,9 +57,9 @@ public class SendTextAction extends BotAction {
      * Sets the text that is supposed to be sent.
      *
      * @param text The text to send
-     * @return The {@link SendTextAction}
+     * @return The {@link ErrorMessageAction}
      */
-    public SendTextAction setText(String text) {
+    public ErrorMessageAction setText(String text) {
         this.text = text;
         return this;
     }
@@ -77,9 +77,9 @@ public class SendTextAction extends BotAction {
      * Sets whether the receiver of the text is supposed to be notified.
      *
      * @param notify True, if the receiver should be notified; false otherwise
-     * @return The {@link SendTextAction}
+     * @return The {@link ErrorMessageAction}
      */
-    public SendTextAction setNotify(boolean notify) {
+    public ErrorMessageAction setNotify(boolean notify) {
         this.notify = notify;
         return this;
     }
@@ -97,9 +97,9 @@ public class SendTextAction extends BotAction {
      * Sets hether HTML is supported within the given text.
      *
      * @param HTML True, if HTML should be supported; false otherwise
-     * @return THe {@link SendTextAction}
+     * @return THe {@link ErrorMessageAction}
      */
-    public SendTextAction setHTML(boolean HTML) {
+    public ErrorMessageAction setHTML(boolean HTML) {
         isHTML = HTML;
         return this;
     }

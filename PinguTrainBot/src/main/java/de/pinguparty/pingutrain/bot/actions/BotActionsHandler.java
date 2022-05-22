@@ -1,6 +1,6 @@
 package de.pinguparty.pingutrain.bot.actions;
 
-import de.pinguparty.pingutrain.bot.actions.send_text.SendTextAction;
+import de.pinguparty.pingutrain.bot.actions.text.TextMessageAction;
 import de.pinguparty.pingutrain.bot.telegram.TelegramBot;
 import de.pinguparty.pingutrain.bot.util.JSONConverter;
 import org.json.JSONObject;
@@ -20,7 +20,7 @@ import java.util.Set;
  */
 @Service
 public class BotActionsHandler {
-    private static final Set<Class<? extends BotAction>> BOT_ACTION_CLASSES = Set.of(SendTextAction.class);
+    private static final Set<Class<? extends BotAction>> BOT_ACTION_CLASSES = Set.of(TextMessageAction.class);
     private static final Map<String, Class<? extends BotAction>> BOT_ACTION_MAP = new HashMap<>();
 
     @Autowired

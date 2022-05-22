@@ -33,14 +33,6 @@ public interface Interaction {
     String getStartCommand();
 
     /**
-     * Returns whether the interaction is stateful, i.e. needs to persist a state during the interaction.
-     *
-     * @return True, if the interaction is stateful; false otherwise
-     */
-    @JsonIgnore
-    boolean isStateful();
-
-    /**
      * Handles incoming user messages by involving a {@link BotCommander} and/or a {@link UserInteractionManager}.
      *
      * @param botCommander           The {@link BotCommander} to use
